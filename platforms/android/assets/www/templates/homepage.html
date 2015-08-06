@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+
+    <title>Homepage</title>
+    <link href="../lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <script src="../lib/ionic/js/ionic.bundle.js"></script>
+    <!-- ng-cordova for plugins -->
+    <script src="../lib/ng-cordova/ng-cordova.min.js"></script>
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="../cordova.js"></script>
+
+    <!-- your app's js -->
+    <script src="../js/homepage.js"></script>
+  </head>
+
+  <body ng-app="homepage">
+    <ion-nav-view  ng-controller="HomepageCtrl"></ion-nav-view>
+    <ion-side-menus ng-controller="HomepageCtrl">
+        <ion-side-menu-content>
+          <ion-nav-bar class="bar-stable nav-title-slide-ios7">
+          <!--    <ion-nav-back-button class="button-clear"><i class="icon ion-ios7-arrow-back"></i> Back</ion-nav-back-button>
+          -->
+          </ion-nav-bar>
+          <ion-nav-view name="menuContent" animation="slide-left-right"></ion-nav-view>
+        </ion-side-menu-content>
+
+
+        <ion-side-menu side="left">
+          <header class="bar bar-header bar-stable">
+            <h1 class="title">Menu</h1>
+          </header>
+          <ion-content class="has-header">
+            <ion-list>
+              <ion-item ui-sref="profilo" menu-close>
+                Profilo
+              </ion-item>
+              <ion-item ui-sref="messaggi" menu-close>
+                Messaggi
+              </ion-item>
+              <ion-item ui-sref="profilo" menu-close>
+                Ricerca utente
+              </ion-item>
+              <ion-item ui-sref="chiSeguo" menu-close>
+                Chi seguo
+              </ion-item>
+              <ion-item ui-sref="chiMiSegue" menu-close>
+                Chi mi segue
+              </ion-item>
+              <ion-item ui-sref="profilo" menu-close>
+                Corsi
+              </ion-item>
+              <ion-item ui-sref="profilo" menu-close>
+                Ultime news
+              </ion-item>
+            </ion-list>
+          </ion-content>
+        </ion-side-menu>
+
+
+      </ion-side-menus>
+      <script id="profilo.html" type="text/ng-template">
+        <!-- The title of the ion-view will be shown on the navbar -->
+
+        <ion-view title="Profilo" ng-controller="Profilo">
+          <ion-nav-buttons side="left">
+            <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+          </ion-nav-buttons>
+          <ion-nav-buttons side="right">
+            <button class="button button-clear button-positive right" ng-click="openPopover($event)">Impostazioni</button>
+          </ion-nav-buttons>
+          <ion-content class="padding has-header" style="overflow:auto;">
+            <!-- The content of the page -->
+            <div class="list">
+              <div id="profileImage">
+                <img ng-src="/img/default.png" width=200 height=200 />
+              </div>
+              <label class="item item-input item-stacked-label">
+                <span class="input-label">Nome</span>
+                <input ng-disabled="edit" type="email" ng-model="user.nome">
+              </label>
+              <label class="item item-input item-stacked-label">
+                <span class="input-label">Cognome</span>
+                <input ng-disabled="edit" type="email" ng-model="user.cognome">
+              </label>
+              <label class="item item-input item-stacked-label">
+                <span class="input-label">Email</span>
+                <input ng-disabled="edit" type="email" ng-model="user.email">
+              </label>
+              <label class="item item-input item-stacked-label">
+                <span class="input-label">Data di nascita</span>
+                <input ng-disabled="edit" type="email" ng-model="user.dataDiNascita">
+              </label>
+              <label class="item item-input item-stacked-label">
+                <span class="input-label">Luogo di nascita</span>
+                <input ng-disabled="edit" type="email" ng-model="user.luogoDiNascita">
+              </label>
+              <label class="item item-input item-stacked-label">
+                <span class="input-label">Corso di laurea</span>
+                <input ng-disabled="edit" type="email" ng-model="user.corso">
+              </label>
+              <label class="item item-input item-stacked-label">
+                <span class="input-label">Anno di immatricolazione</span>
+                <input ng-disabled="edit" type="email" ng-model="user.annoImmatricolazione">
+              </label>
+            </div>
+            <div style="position: absolute;top: 40%;left: 40%;display:none;" id="spinner">
+                <ion-spinner class="ripple" icon="ripple"></ion-spinner>
+            </div>
+          </ion-content>
+        </ion-view>
+      </script>
+
+      <script id="profileSettings.html" type="text/ng-template">
+      <ion-popover-view>
+        <ion-content>
+          <ion-list>
+            <ion-item>
+              Modifica profilo
+            </ion-item>
+            <ion-item>
+              Cambia password
+            </ion-item>
+            <ion-item>
+              Rimuovi account
+            </ion-item>
+            <ion-item>
+              Logout
+            </ion-item>
+          </ion-list>
+        </ion-content>
+      </ion-popover-view>
+      </script>
+      <script id="messages.html" type="text/ng-template">
+          <ion-view title="Messaggi" ng-controller="Messaggi">
+            <ion-nav-buttons side="left">
+              <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+            </ion-nav-buttons>
+
+            <ion-content class="padding has-header" style="overflow:auto;">
+              <div class="messages-buttons">
+                <button class="button button-light" ng-click="showSent()">Inviati ({{messages.number_sent}})</button>
+                <button class="button button-light" ng-click="showReceived()">Ricevuti ({{messages.number_received}})</button>
+              </div>
+              <ion-list ng-show="sent">
+                <a class="item item-avatar" href="#" ng-repeat="message in messages.sent">
+
+                  <p class="firstLetter">
+                  {{message.destinatario[0].trim().toUpperCase()}}
+                  </p>
+                  <h2 style="display:inline;">A: {{message.destinatario}}</h2>
+                  <p style="display:inline;" class="right">{{message.data}}</p>
+                  <h3 class="objectMsg">Oggetto: {{message.oggetto}}</h3>
+                  <p class="truncateMsg">{{message.testo}}</p>
+                </a>
+              </ion-list>
+              <ion-list ng-show="received">
+              <a class="item item-avatar" href="#" ng-repeat="message in messages.received">
+                <p class="firstLetter">
+                {{message.mittente[0].trim().toUpperCase()}}
+                </p>
+                <h2 style="display:inline;">Da: {{message.mittente}}</h2>
+                <p style="display:inline;" class="right">{{message.data}}</p>
+                <h3 class="objectMsg">Oggetto: {{message.oggetto}}</h3>
+                <p class="truncateMsg">{{message.testo}}</p>
+              </a>
+              </ion-list>
+              <div style="position: absolute;top: 40%;left: 40%;display:none;" id="spinner">
+                  <ion-spinner class="ripple" icon="ripple"></ion-spinner>
+              </div>
+            </ion-content>
+          </ion-view>
+      </script>
+      <script id="chiSeguo.html" type="text/ng-template">
+        <ion-view title="Chi seguo" ng-controller="ChiSeguo">
+          <ion-nav-buttons side="left">
+            <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+          </ion-nav-buttons>
+          <ion-content class="padding has-header" style="overflow:auto;">
+            <ion-list>
+              <a on-hold="userOptions($event,user.email)" class="item item-avatar" href="#" ng-repeat="user in users.users">
+                <p class="firstLetter">
+                {{user.nome[0].trim().toUpperCase()}}
+                </p>
+                <h2>{{user.nome+user.cognome}}</h2>
+                <h3>{{user.email}}</h3>
+              </a>
+            </ion-list>
+            <div style="position: absolute;top: 40%;left: 40%;display:none;" id="spinner">
+                <ion-spinner class="ripple" icon="ripple"></ion-spinner>
+            </div>
+          </ion-content>
+        </ion-view>
+      </script>
+      <script id="chiMiSegue.html" type="text/ng-template">
+        <ion-view title="Chi mi segue" ng-controller="ChiMiSegue">
+          <ion-nav-buttons side="left">
+            <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+          </ion-nav-buttons>
+          <ion-content class="padding has-header" style="overflow:auto;">
+            <ion-list>
+              <a on-hold="userOptions($event,user.email)" class="item item-avatar" href="#" ng-repeat="user in users.users">
+                <p class="firstLetter">
+                {{user.nome[0].trim().toUpperCase()}}
+                </p>
+                <h2>{{user.nome+user.cognome}}</h2>
+                <h3>{{user.email}}</h3>
+              </a>
+            </ion-list>
+            <div style="position: absolute;top: 40%;left: 40%;display:none;" id="spinner">
+                <ion-spinner class="ripple" icon="ripple"></ion-spinner>
+            </div>
+          </ion-content>
+        </ion-view>
+      </script>
+      <script id="userOptions.html" type="text/ng-template">
+      <ion-popover-view>
+        <ion-content>
+          <ion-list>
+            <ion-item>
+              Visualizza profilo
+            </ion-item>
+            <ion-item>
+              Segui
+            </ion-item>
+          </ion-list>
+        </ion-content>
+      </ion-popover-view>
+      </script>
+      <script id="ricercaUtente.html" type="text/ng-template">
+      </script>
+      <script id="ultimeNews.html" type="text/ng-template">
+      </script>
+      <script id="corsi.html" type="text/ng-template">
+      </script>
+  </body>
+</html>
